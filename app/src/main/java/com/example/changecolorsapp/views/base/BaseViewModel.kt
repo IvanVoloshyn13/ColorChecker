@@ -1,4 +1,4 @@
-package com.example.changecolorsapp.util
+package com.example.changecolorsapp.views.base
 
 import androidx.lifecycle.ViewModel
 

@@ -1,4 +1,4 @@
-package com.example.changecolorsapp.views
+package com.example.changecolorsapp.views.base
 
 import java.io.Serializable
 

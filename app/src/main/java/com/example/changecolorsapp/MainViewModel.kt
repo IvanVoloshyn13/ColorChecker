@@ -9,7 +9,7 @@ import com.example.changecolorsapp.util.Event
 import com.example.changecolorsapp.util.LiveEvent
 import com.example.changecolorsapp.util.MutableLiveEvent
 import com.example.changecolorsapp.util.ResourceActions
-import com.example.changecolorsapp.views.BaseScreen
+import com.example.changecolorsapp.views.base.BaseScreen
 import com.example.changecolorsapp.views.Navigator
 import com.example.changecolorsapp.views.UiActions
 

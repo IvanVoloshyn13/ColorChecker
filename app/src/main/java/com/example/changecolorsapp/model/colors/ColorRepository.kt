@@ -2,9 +2,12 @@ package com.example.changecolorsapp.model.colors
 
 import com.example.changecolorsapp.model.Repository
 
+
 typealias ColorListener=(NamedColor)->Unit
 
-interface ColorsRepository : Repository {
+
+
+interface ColorRepository:Repository {
 
     var currentColor: NamedColor
 

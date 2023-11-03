@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import com.example.changecolorsapp.views.HasScreenTitle
 import com.example.changecolorsapp.views.base.BaseFragment
+import com.example.changecolorsapp.views.currentcolor.CurrentColorFragment
 
 class MainActivity : AppCompatActivity() {
     private val activityViewModel by viewModels<MainViewModel> {
@@ -23,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             activityViewModel.launchFragment(
                 activity = this,
-                screen =,
+                screen = CurrentColorFragment.Screen(),
                 addToBackStack = false
             )
         }

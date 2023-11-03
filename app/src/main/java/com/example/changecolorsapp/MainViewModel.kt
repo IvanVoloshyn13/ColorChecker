@@ -6,12 +6,12 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.AndroidViewModel
 import com.example.changecolorsapp.util.Event
-import com.example.changecolorsapp.util.LiveEvent
-import com.example.changecolorsapp.util.MutableLiveEvent
 import com.example.changecolorsapp.util.ResourceActions
-import com.example.changecolorsapp.views.base.BaseScreen
 import com.example.changecolorsapp.views.Navigator
 import com.example.changecolorsapp.views.UiActions
+import com.example.changecolorsapp.views.base.BaseScreen
+import com.example.changecolorsapp.views.base.LiveEvent
+import com.example.changecolorsapp.views.base.MutableLiveEvent
 
 const val ARG_SCREEN = "ARG_SCREEN"
 
@@ -24,7 +24,7 @@ const val ARG_SCREEN = "ARG_SCREEN"
  * it may contain android dependencies (context, bundles, etc.).
  */
 
-class MainViewModel(application: Application) : AndroidViewModel(application), Navigator,
+class MainViewModel(application: Application, ) : AndroidViewModel(application), Navigator,
     UiActions {
 
     val whenActivityActive = ResourceActions<MainActivity>()
@@ -44,7 +44,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), N
             if (result != null) {
                 _result.value = Event(result)
             }
-            it.onBackPressedDispatcher
+            it.onBackPressedDispatcher.onBackPressed()
         }
     }
 
@@ -55,7 +55,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), N
     override fun getString(messageRes: Int, vararg args: Any): String {
         return getApplication<App>().getString(messageRes, *args)
     }
-
+    @Suppress("DEPRECATION")
     fun launchFragment(activity: MainActivity, screen: BaseScreen, addToBackStack: Boolean = true) {
         // as screen classes are inside fragments -> we can create fragment directly from screen
         val fragment = screen.javaClass.enclosingClass.newInstance() as Fragment
@@ -80,6 +80,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), N
         super.onCleared()
         whenActivityActive.clear()
     }
+
 
 
 }

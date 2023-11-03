@@ -10,5 +10,5 @@ package com.example.changecolorsapp.views
  */
 
 interface HasScreenTitle {
-    fun getScreenTitle():String
+    fun getScreenTitle():String?
 }

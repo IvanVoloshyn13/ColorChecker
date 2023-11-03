@@ -8,6 +8,6 @@ import com.example.changecolorsapp.model.colors.InMemoryColorsRepository
 
 class App : Application() {
     val models = listOf<Any>(
-        InMemoryColorsRepository
+        InMemoryColorsRepository()
     )
 }

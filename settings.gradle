@@ -10,7 +10,13 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        jcenter()
     }
 }
+
+
+
 rootProject.name = "ChangeColorsApp"
 include ':app'
+
+

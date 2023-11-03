@@ -1,8 +1,14 @@
 package com.example.changecolorsapp.model.colors
 
 import android.graphics.Color
+import com.example.changecolorsapp.model.Repository
 
-class InMemoryColorsRepository : ColorsRepository {
+
+/**
+ * Simple in-memory implementation of [ColorsRepository]
+ */
+class InMemoryColorsRepository : ColorRepository {
+
     override var currentColor: NamedColor = AVAILABLE_COLORS[0]
         set(value) {
             if (field != value) {
@@ -10,26 +16,26 @@ class InMemoryColorsRepository : ColorsRepository {
                 listeners.forEach { it(value) }
             }
         }
+
     private val listeners = mutableSetOf<ColorListener>()
 
-    override fun getAvailableColors(): List<NamedColor> {
-        TODO("Not yet implemented")
-    }
-
-    override fun getById(id: Long): NamedColor {
-        TODO("Not yet implemented")
-    }
+    override fun getAvailableColors(): List<NamedColor> = AVAILABLE_COLORS
 
     override fun addListener(listener: ColorListener) {
-        TODO("Not yet implemented")
+        listeners += listener
+        listener(currentColor)
     }
 
     override fun removeListener(listener: ColorListener) {
-        TODO("Not yet implemented")
+        listeners -= listener
+    }
+
+    override fun getById(id: Long): NamedColor {
+        return AVAILABLE_COLORS.first { it.id == id }
     }
 
     companion object {
-        val AVAILABLE_COLORS = listOf<NamedColor>(
+        private val AVAILABLE_COLORS = listOf(
             NamedColor(1, "Red", Color.RED),
             NamedColor(2, "Green", Color.GREEN),
             NamedColor(3, "Blue", Color.BLUE),

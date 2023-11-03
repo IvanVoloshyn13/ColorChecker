@@ -5,24 +5,34 @@ import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory
 import androidx.savedstate.SavedStateRegistryOwner
 import com.example.changecolorsapp.ARG_SCREEN
 import com.example.changecolorsapp.App
 import com.example.changecolorsapp.MainViewModel
 import java.lang.reflect.Constructor
 
+@Suppress("DEPRECATION")
+/**
+ * Use this method for getting view-models from your fragments
+ */
 inline fun <reified VM : ViewModel> BaseFragment.screenViewModel() = viewModels<VM> {
     val application = requireActivity().application as App
     val screen = requireArguments().getSerializable(ARG_SCREEN) as BaseScreen
+
     // using Providers API directly for getting MainViewModel instance
-    val provider =
-        ViewModelProvider(requireActivity(), ViewModelProvider.AndroidViewModelFactory(application))
+    val provider = ViewModelProvider(
+        requireActivity(),
+        AndroidViewModelFactory(application)
+    )
     val mainViewModel = provider[MainViewModel::class.java]
+
     // forming the list of available dependencies:
     // - singleton scope dependencies (repositories) -> from App class
     // - activity VM scope dependencies -> from MainViewModel
     // - screen VM scope dependencies -> screen args
-    val dependencies = listOf(screen, mainViewModel) + application.models
+    val dependencies = listOf( screen,mainViewModel )+application.models
+
     // creating factory
     ViewModelFactory(dependencies, this)
 }
@@ -31,6 +41,7 @@ class ViewModelFactory(
     private val dependencies: List<Any>,
     owner: SavedStateRegistryOwner
 ) : AbstractSavedStateViewModelFactory(owner, null) {
+
     override fun <T : ViewModel> create(
         key: String,
         modelClass: Class<T>,
@@ -41,7 +52,6 @@ class ViewModelFactory(
 
         // - SavedStateHandle is also a dependency from screen VM scope, but we can obtain it only here,
         //   that's why merging it with the list of other dependencies:
-
         val dependenciesWithSavedState = dependencies + handle
 
         // generating the list of arguments to be passed into the view-model's constructor
@@ -53,14 +63,16 @@ class ViewModelFactory(
 
     private fun findDependencies(constructor: Constructor<*>, dependencies: List<Any>): List<Any> {
         val args = mutableListOf<Any>()
-
         // here we iterate through view-model's constructor arguments and for each
         // argument we search dependency that can be assigned to the argument
-
         constructor.parameterTypes.forEach { parameterClass ->
             val dependency = dependencies.first { parameterClass.isAssignableFrom(it.javaClass) }
-            args.add(dependency)
+            if (dependency != null) {
+                args.add(dependency)
+            }
         }
         return args
     }
+
+
 }

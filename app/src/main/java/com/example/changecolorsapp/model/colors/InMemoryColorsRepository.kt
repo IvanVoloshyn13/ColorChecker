@@ -1,7 +1,6 @@
 package com.example.changecolorsapp.model.colors
 
 import android.graphics.Color
-import com.example.changecolorsapp.model.Repository
 
 
 /**

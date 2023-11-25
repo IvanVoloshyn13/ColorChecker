@@ -1,4 +1,4 @@
-package com.example.changecolorsapp.views.base
+package com.example.foundation.views
 
 import androidx.fragment.app.Fragment
 import com.example.changecolorsapp.MainActivity

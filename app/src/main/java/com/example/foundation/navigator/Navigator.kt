@@ -1,6 +1,6 @@
-package com.example.changecolorsapp.views
+package com.example.foundation.navigator
 
-import com.example.changecolorsapp.views.base.BaseScreen
+import com.example.foundation.views.BaseScreen
 
 /**
  * Navigation for your application

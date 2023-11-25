@@ -8,12 +8,10 @@ import android.view.ViewTreeObserver
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.changecolorsapp.R
 import com.example.changecolorsapp.databinding.FragmentChangeColorBinding
-import com.example.changecolorsapp.views.HasScreenTitle
-import com.example.changecolorsapp.views.base.BaseFragment
-import com.example.changecolorsapp.views.base.BaseScreen
-import com.example.changecolorsapp.views.base.BaseViewModel
-import com.example.changecolorsapp.views.base.screenViewModel
-import kotlinx.parcelize.Parcelize
+import com.example.foundation.views.HasScreenTitle
+import com.example.foundation.views.BaseFragment
+import com.example.foundation.views.BaseScreen
+import com.example.foundation.views.screenViewModel
 
 /**
  * Screen for changing color.

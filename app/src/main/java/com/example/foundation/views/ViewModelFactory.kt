@@ -1,4 +1,4 @@
-package com.example.changecolorsapp.views.base
+package com.example.foundation.views
 
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.AbstractSavedStateViewModelFactory
@@ -7,9 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory
 import androidx.savedstate.SavedStateRegistryOwner
-import com.example.changecolorsapp.ARG_SCREEN
+import com.example.foundation.ARG_SCREEN
 import com.example.changecolorsapp.App
-import com.example.changecolorsapp.MainViewModel
+import com.example.foundation.ActivityScopeViewModel
 import java.lang.reflect.Constructor
 
 @Suppress("DEPRECATION")
@@ -25,13 +25,13 @@ inline fun <reified VM : ViewModel> BaseFragment.screenViewModel() = viewModels<
         requireActivity(),
         AndroidViewModelFactory(application)
     )
-    val mainViewModel = provider[MainViewModel::class.java]
+    val activityScopeViewModel = provider[ActivityScopeViewModel::class.java]
 
     // forming the list of available dependencies:
     // - singleton scope dependencies (repositories) -> from App class
     // - activity VM scope dependencies -> from MainViewModel
     // - screen VM scope dependencies -> screen args
-    val dependencies = listOf( screen,mainViewModel )+application.models
+    val dependencies = listOf( screen,activityScopeViewModel )+application.models
 
     // creating factory
     ViewModelFactory(dependencies, this)

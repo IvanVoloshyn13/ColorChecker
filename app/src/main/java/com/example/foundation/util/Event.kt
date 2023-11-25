@@ -1,5 +1,5 @@
-package com.example.changecolorsapp.util
-import androidx.lifecycle.LiveData
+package com.example.foundation.util
+
 class Event<T>(
     private val value: T
 ) {

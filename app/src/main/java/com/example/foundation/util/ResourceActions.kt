@@ -1,4 +1,4 @@
-package com.example.changecolorsapp.util
+package com.example.foundation.util
 
 typealias ResourceAction<T> = (T)->Unit
 

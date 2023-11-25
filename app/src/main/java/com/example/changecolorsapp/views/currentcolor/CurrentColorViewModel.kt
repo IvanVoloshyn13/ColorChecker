@@ -7,10 +7,9 @@ import com.example.changecolorsapp.model.colors.ColorListener
 import com.example.changecolorsapp.model.colors.ColorRepository
 
 import com.example.changecolorsapp.model.colors.NamedColor
-import com.example.changecolorsapp.views.Navigator
-import com.example.changecolorsapp.views.UiActions
-import com.example.changecolorsapp.views.base.BaseScreen
-import com.example.changecolorsapp.views.base.BaseViewModel
+import com.example.foundation.navigator.Navigator
+import com.example.foundation.uiactions.UiActions
+import com.example.foundation.views.BaseViewModel
 import com.example.changecolorsapp.views.changecolor.ChangeColorFragment
 
 class CurrentColorViewModel(

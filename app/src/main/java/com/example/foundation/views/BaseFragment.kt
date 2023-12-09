@@ -16,6 +16,6 @@ abstract class BaseFragment:Fragment() {
     fun notifyScreenUpdates() {
         // if you have more than 1 activity -> you should use a separate interface instead of direct
         // cast to MainActivity
-        (requireActivity() as MainActivity).notifyScreenUpdates()
+        (requireActivity() as FragmentsHolder).notifyScreenUpdates()
     }
 }

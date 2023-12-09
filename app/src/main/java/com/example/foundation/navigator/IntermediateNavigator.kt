@@ -7,7 +7,7 @@ class IntermediateNavigator : Navigator {
     private val targetNavigator = ResourceActions<Navigator>()
 
     override fun launch(screen: BaseScreen) {
-        targetNavigator {
+        targetNavigator.invoke {
             it.launch(screen)
         }
 

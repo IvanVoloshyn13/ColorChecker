@@ -21,23 +21,18 @@ class StackFragmentNavigator(
     private val initialScreenCreator: () -> BaseScreen
 ) : Navigator {
 
-
     private var result: Event<Any>? = null
-
 
     override fun launch(screen: BaseScreen) {
         launchFragment(screen)
     }
 
     override fun goBack(result: Any?) {
-
         if (result != null) {
             this.result = Event(result)
         }
         activity.onBackPressedDispatcher.onBackPressed()
-
     }
-
 
     fun onCreate(savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
@@ -47,16 +42,14 @@ class StackFragmentNavigator(
             )
         }
         activity.supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentCallbacks, false)
-
     }
 
     fun onDestroy() {
         activity.supportFragmentManager.unregisterFragmentLifecycleCallbacks(fragmentCallbacks)
-
     }
 
     @Suppress("DEPRECATION")
-    fun launchFragment(
+    private fun launchFragment(
         screen: BaseScreen,
         addToBackStack: Boolean = true
     ) {

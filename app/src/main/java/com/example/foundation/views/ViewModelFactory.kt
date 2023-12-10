@@ -5,8 +5,8 @@ import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.savedstate.SavedStateRegistryOwner
-import com.example.changecolorsapp.App
 import com.example.foundation.ARG_SCREEN
+import com.example.foundation.BaseApplication
 import java.lang.reflect.Constructor
 
 @Suppress("DEPRECATION")
@@ -14,7 +14,7 @@ import java.lang.reflect.Constructor
  * Use this method for getting view-models from your fragments
  */
 inline fun <reified VM : ViewModel> BaseFragment.screenViewModel() = viewModels<VM> {
-    val application = requireActivity().application as App
+    val application = requireActivity().application as BaseApplication
     val screen = requireArguments().getSerializable(ARG_SCREEN) as BaseScreen
 
     // using Providers API directly for getting MainViewModel instance
@@ -24,7 +24,7 @@ inline fun <reified VM : ViewModel> BaseFragment.screenViewModel() = viewModels<
     // - singleton scope dependencies (repositories) -> from App class
     // - activity VM scope dependencies -> from MainViewModel
     // - screen VM scope dependencies -> screen args
-    val dependencies = listOf(screen, activityScopeViewModel) + application.models
+    val dependencies = listOf(screen, activityScopeViewModel) + application.repositories
 
     // creating factory
     ViewModelFactory(dependencies, this)

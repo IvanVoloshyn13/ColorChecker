@@ -14,5 +14,10 @@ class App : Application(), BaseApplication {
         InMemoryColorsRepository()
     )
     override val repositories: List<Repository>
-        get() = models
+        get() {
+            if (models.isNotEmpty()) {
+               return models
+            }
+            else return emptyList()
+        }
 }

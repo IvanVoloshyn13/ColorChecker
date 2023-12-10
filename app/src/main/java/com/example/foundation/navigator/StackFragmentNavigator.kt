@@ -37,7 +37,7 @@ class StackFragmentNavigator(
     fun onCreate(savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
             launchFragment(
-                screen = CurrentColorFragment.Screen(),
+                screen = initialScreenCreator.invoke(),
                 addToBackStack = false
             )
         }

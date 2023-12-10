@@ -2,6 +2,7 @@ package com.example.changecolorsapp.views.currentcolor
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.changecolorsapp.R
 import com.example.changecolorsapp.model.colors.ColorListener
 import com.example.changecolorsapp.model.colors.ColorRepository
@@ -11,22 +12,34 @@ import com.example.foundation.navigator.Navigator
 import com.example.foundation.uiactions.UiActions
 import com.example.foundation.views.BaseViewModel
 import com.example.changecolorsapp.views.changecolor.ChangeColorFragment
+import com.example.foundation.model.LoadingResource
+import com.example.foundation.model.Resource
+import com.example.foundation.model.SuccessResource
+import com.example.foundation.model.takeSuccess
+import com.example.foundation.views.LiveResult
+import com.example.foundation.views.MutableLiveResult
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class CurrentColorViewModel(
     private val navigator: Navigator,
     private val uiActions: UiActions,
     private val colorsRepository: ColorRepository
 ) : BaseViewModel() {
-    private val _currentColor = MutableLiveData<NamedColor>()
-    val currentColor: LiveData<NamedColor> = _currentColor
+    private val _currentColor = MutableLiveResult<NamedColor>(LoadingResource())
+    val currentColor: LiveResult<NamedColor> = _currentColor
 
 
     private val colorListener: ColorListener = {
-        _currentColor.postValue(it)
+        _currentColor.postValue(SuccessResource(it))
     }
 
     init {
-        colorsRepository.addListener(colorListener)
+        viewModelScope.launch {
+            delay(2000)
+            colorsRepository.addListener(colorListener)
+        }
+
     }
 
 
@@ -52,7 +65,7 @@ class CurrentColorViewModel(
     // ---
 
     fun changeColor() {
-        val currentColor = currentColor.value ?: return
+        val currentColor = currentColor.value.takeSuccess() ?: return
         val screen = ChangeColorFragment.Screen(currentColor.id)
         navigator.launch(screen)
     }

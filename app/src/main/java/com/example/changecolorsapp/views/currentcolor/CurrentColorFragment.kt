@@ -5,6 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.changecolorsapp.databinding.FragmentCurrentColorBinding
+import com.example.changecolorsapp.databinding.PartResultBinding
+import com.example.changecolorsapp.views.renderSimpleResult
+import com.example.foundation.model.ErrorResource
+import com.example.foundation.model.LoadingResource
+import com.example.foundation.model.SuccessResource
 import com.example.foundation.views.BaseFragment
 import com.example.foundation.views.BaseScreen
 import com.example.foundation.views.screenViewModel
@@ -31,9 +36,14 @@ class CurrentColorFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        viewModel.currentColor.observe(this@CurrentColorFragment.viewLifecycleOwner) {
-            binding.colorView.setBackgroundColor(it.value)
+        viewModel.currentColor.observe(this@CurrentColorFragment.viewLifecycleOwner) { result ->
+            renderSimpleResult(
+                root = binding.root,
+                result = result,
+                onSuccess = {
+                    binding.colorView.setBackgroundColor(it.value)
+                }
+            )
         }
 
         binding.changeColorButton.setOnClickListener {

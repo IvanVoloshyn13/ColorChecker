@@ -1,18 +1,15 @@
 package com.example.changecolorsapp.model.colors
 
 import android.graphics.Color
-import com.example.foundation.model.tasks.Task
-import com.example.foundation.model.tasks.ThreadUtils
-import com.example.foundation.model.tasks.factories.TasksFactory
+import com.example.foundation.model.coroutines.IoDispatcher
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 
 
 /**
  * Simple in-memory implementation of [ColorsRepository]
  */
-class InMemoryColorsRepository(
-    private val tasksFactory: TasksFactory,
-    private val threadUtils: ThreadUtils
-) : ColorsRepository {
+class InMemoryColorsRepository(private val ioDispatcher: IoDispatcher) : ColorsRepository {
 
     private var currentColor: NamedColor = AVAILABLE_COLORS[0]
 
@@ -26,23 +23,24 @@ class InMemoryColorsRepository(
         listeners -= listener
     }
 
-    override fun getAvailableColors(): Task<List<NamedColor>> = tasksFactory.async {
-        threadUtils.sleep(1000)
-        return@async AVAILABLE_COLORS
+
+    override suspend fun getAvailableColors(): List<NamedColor> = withContext(ioDispatcher.value) {
+        delay(1000)
+        return@withContext AVAILABLE_COLORS
     }
 
-    override fun getById(id: Long): Task<NamedColor> = tasksFactory.async {
-        threadUtils.sleep(1000)
-        return@async AVAILABLE_COLORS.first { it.id == id }
+    override suspend fun getById(id: Long): NamedColor= withContext(ioDispatcher.value) {
+        delay(1000)
+        return@withContext AVAILABLE_COLORS.first { it.id == id }
     }
 
-    override fun getCurrentColor(): Task<NamedColor> = tasksFactory.async {
-        threadUtils.sleep(1000)
-        return@async currentColor
+    override suspend fun getCurrentColor(): NamedColor= withContext(ioDispatcher.value) {
+        delay(1000)
+        return@withContext currentColor
     }
 
-    override fun setCurrentColor(color: NamedColor): Task<Unit> = tasksFactory.async {
-        threadUtils.sleep(1000)
+    override suspend fun setCurrentColor(color: NamedColor)= withContext(ioDispatcher.value) {
+        delay(1000)
         if (currentColor != color) {
             currentColor = color
             listeners.forEach { it(color) }

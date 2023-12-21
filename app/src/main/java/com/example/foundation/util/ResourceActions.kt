@@ -1,6 +1,6 @@
 package com.example.foundation.util
 
-import com.example.foundation.model.tasks.dispatchers.Dispatcher
+import com.example.foundation.model.dispatchers.Dispatcher
 
 typealias ResourceAction<T> = (T) -> Unit
 

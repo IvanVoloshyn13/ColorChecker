@@ -1,6 +1,7 @@
 package com.example.changecolorsapp.views.currentcolor
 
 import android.Manifest
+import androidx.lifecycle.viewModelScope
 import com.example.changecolorsapp.R
 import com.example.changecolorsapp.model.colors.ColorListener
 import com.example.changecolorsapp.model.colors.ColorsRepository
@@ -17,7 +18,7 @@ import com.example.foundation.model.sideeffects.permissions.plugin.PermissionSta
 import com.example.foundation.model.sideeffects.resources.Resources
 import com.example.foundation.model.sideeffects.toasts.Toasts
 import com.example.foundation.model.takeSuccess
-import com.example.foundation.model.tasks.dispatchers.Dispatcher
+import com.example.foundation.model.dispatchers.Dispatcher
 import com.example.foundation.model.tasks.factories.TasksFactory
 
 import com.example.foundation.views.BaseViewModel
@@ -32,10 +33,9 @@ class CurrentColorViewModel(
     private val permissions: Permissions,
     private val intents: Intents,
     private val dialogs: Dialogs,
-    private val tasksFactory: TasksFactory,
     private val colorsRepository: ColorsRepository,
-    dispatcher: Dispatcher
-) : BaseViewModel(dispatcher) {
+
+) : BaseViewModel() {
 
     private val _currentColor = MutableLiveResult<NamedColor>(LoadingResource())
     val currentColor: LiveResult<NamedColor> = _currentColor
@@ -77,34 +77,36 @@ class CurrentColorViewModel(
     /**
      * Example of using side-effect plugins
      */
-    fun requestPermission() = tasksFactory.async<Unit> {
+    fun requestPermission() = viewModelScope.launch {
         val permission = Manifest.permission.ACCESS_FINE_LOCATION
         val hasPermission = permissions.hasPermissions(permission)
         if (hasPermission) {
-            dialogs.show(createPermissionAlreadyGrantedDialog()).await()
+            dialogs.show(createPermissionAlreadyGrantedDialog())
         } else {
-            when (permissions.requestPermission(permission).await()) {
+            when (permissions.requestPermission(permission)) {
                 PermissionStatus.GRANTED -> {
                     toasts.toast(resources.getString(R.string.permissions_grated))
                 }
+
                 PermissionStatus.DENIED -> {
                     toasts.toast(resources.getString(R.string.permissions_denied))
                 }
+
                 PermissionStatus.DENIED_FOREVER -> {
-                    if (dialogs.show(createAskForLaunchingAppSettingsDialog()).await()) {
+                    if (dialogs.show(createAskForLaunchingAppSettingsDialog())) {
                         intents.openAppSettings()
                     }
                 }
             }
         }
-    }.safeEnqueue()
+    }
 
-    fun tryAgain() {
+     fun tryAgain() {
         load()
     }
 
-    private fun load() {
-        colorsRepository.getCurrentColor().into(_currentColor)
+    private fun load() = into(_currentColor) {
+     return@into  colorsRepository.getCurrentColor()
     }
 
     private fun createPermissionAlreadyGrantedDialog() = DialogConfig(

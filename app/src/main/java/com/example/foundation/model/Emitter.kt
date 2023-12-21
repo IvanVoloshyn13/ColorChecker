@@ -1,10 +1,6 @@
-package com.example.foundation.model.tasks.callback
-
-import com.example.foundation.model.FinalResource
+package com.example.foundation.model
 
 typealias CancelListener = () -> Unit
-
-typealias ExecutionListener<T> = (Emitter<T>) -> Unit
 
 /**
  * Emitter instance is passed to [CallbackTask.create] as an argument so you can use it

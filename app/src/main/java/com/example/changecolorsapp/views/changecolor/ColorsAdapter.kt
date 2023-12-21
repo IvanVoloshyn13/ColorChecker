@@ -35,7 +35,7 @@ class ColorsAdapter(
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val namedColor = items[position].namedColor
-        val selected = items[position].isSelected
+        val selected = items[position].selected
         with(holder.binding) {
             root.tag = namedColor
             colorNameTextView.text = namedColor.name
@@ -58,4 +58,5 @@ class ColorsAdapter(
          */
         fun onColorChosen(namedColor: NamedColor)
     }
+
 }

@@ -17,9 +17,14 @@ sealed class Resource<T> {
     }
 }
 
+/**
+ * Operation has been finished
+ */
+sealed class FinalResource<T> : Resource<T>()
+
 class LoadingResource<T> : Resource<T>()
-class SuccessResource<T>(val data: T) : Resource<T>()
-class ErrorResource<T>(val exception: Exception) : Resource<T>()
+class SuccessResource<T>(val data: T) : FinalResource<T>()
+class ErrorResource<T>(val exception: Exception) : FinalResource<T>()
 
 fun <T> Resource<T>?.takeSuccess(): T? {
     return if (this is SuccessResource) {

@@ -8,6 +8,7 @@ import com.example.foundation.model.ErrorResource
 import com.example.foundation.model.LoadingResource
 import com.example.foundation.model.Resource
 import com.example.foundation.model.SuccessResource
+import com.example.foundation.views.activity.ActivityDelegateHolder
 
 abstract class BaseFragment : Fragment() {
 
@@ -20,9 +21,7 @@ abstract class BaseFragment : Fragment() {
      * Call this method when activity controls (e.g. toolbar) should be re-rendered
      */
     fun notifyScreenUpdates() {
-        // if you have more than 1 activity -> you should use a separate interface instead of direct
-        // cast to MainActivity
-        (requireActivity() as FragmentsHolder).notifyScreenUpdates()
+        (requireActivity() as ActivityDelegateHolder).delegate.notifyScreenUpdates()
     }
 
     fun <T> renderResult(

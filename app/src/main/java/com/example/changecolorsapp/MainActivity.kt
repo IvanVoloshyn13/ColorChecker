@@ -2,6 +2,7 @@ package com.example.changecolorsapp
 
 import android.os.Bundle
 import com.example.changecolorsapp.views.currentcolor.CurrentColorFragment
+import com.example.foundation.ActivityScopeViewModel
 import com.example.foundation.model.sideeffects.SideEffectPluginsManager
 import com.example.foundation.model.sideeffects.dialogs.plugin.DialogsPlugin
 import com.example.foundation.model.sideeffects.intents.plugin.IntentsPlugin
@@ -10,13 +11,14 @@ import com.example.foundation.model.sideeffects.navigator.plugin.StackFragmentNa
 import com.example.foundation.model.sideeffects.permissions.plugin.PermissionsPlugin
 import com.example.foundation.model.sideeffects.resources.plugin.ResourcesPlugin
 import com.example.foundation.model.sideeffects.toasts.plugin.ToastsPlugin
+import com.example.foundation.views.FragmentsHolder
 import com.example.foundation.views.activity.BaseActivity
 
 /**
  * This application is a single-activity app. MainActivity is a container
  * for all screens.
  */
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity(),FragmentsHolder {
 
     override fun registerPlugins(manager: SideEffectPluginsManager) = with (manager) {
         val navigator = createNavigator()
@@ -44,5 +46,13 @@ class MainActivity : BaseActivity() {
         ),
         initialScreenCreator = { CurrentColorFragment.Screen() }
     )
+
+    override fun notifyScreenUpdates() {
+        TODO("Not yet implemented")
+    }
+
+    override fun getActivityScopeViewModel(): ActivityScopeViewModel {
+        TODO("Not yet implemented")
+    }
 
 }

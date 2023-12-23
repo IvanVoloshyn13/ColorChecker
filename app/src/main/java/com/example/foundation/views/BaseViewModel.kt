@@ -4,6 +4,7 @@ package com.example.foundation.views
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.example.foundation.model.ErrorResource
 import com.example.foundation.model.Resource
@@ -12,7 +13,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+
 
 typealias LiveResult<T> = LiveData<Resource<T>>
 typealias MutableLiveResult<T> = MutableLiveData<Resource<T>>
@@ -67,8 +70,31 @@ open class BaseViewModel(
 
     }
 
+
+    fun <T> into(stateFlow: MutableStateFlow<Resource<T>>, block: suspend () -> T) {
+        viewModelScope.launch {
+            try {
+                stateFlow.value=SuccessResource(block())
+            } catch (e: Exception) {
+                stateFlow.value= ErrorResource(e)
+            }
+        }
+
+    }
     private fun clearViewModelScope() {
         viewModelScope.cancel()
+    }
+
+    fun <T> SavedStateHandle.getStateFlowFromSavedState(key: String, initialValue: T): MutableStateFlow<T> {
+        val savedStateHandle = this
+        val mutableFlow = MutableStateFlow(savedStateHandle[key] ?: initialValue)
+        viewModelScope.launch {
+            mutableFlow.collect {
+                savedStateHandle[key] = it
+            }
+        }
+
+        return mutableFlow
     }
 
 }

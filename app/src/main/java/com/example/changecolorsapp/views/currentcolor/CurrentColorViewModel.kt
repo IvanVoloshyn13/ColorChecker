@@ -1,7 +1,7 @@
 package com.example.changecolorsapp.views.currentcolor
 
+
 import android.Manifest
-import androidx.lifecycle.viewModelScope
 import com.example.changecolorsapp.R
 import com.example.changecolorsapp.model.colors.ColorListener
 import com.example.changecolorsapp.model.colors.ColorsRepository
@@ -18,12 +18,10 @@ import com.example.foundation.model.sideeffects.permissions.plugin.PermissionSta
 import com.example.foundation.model.sideeffects.resources.Resources
 import com.example.foundation.model.sideeffects.toasts.Toasts
 import com.example.foundation.model.takeSuccess
-import com.example.foundation.model.dispatchers.Dispatcher
-import com.example.foundation.model.tasks.factories.TasksFactory
-
 import com.example.foundation.views.BaseViewModel
 import com.example.foundation.views.LiveResult
 import com.example.foundation.views.MutableLiveResult
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class CurrentColorViewModel(
@@ -35,26 +33,25 @@ class CurrentColorViewModel(
     private val dialogs: Dialogs,
     private val colorsRepository: ColorsRepository,
 
-) : BaseViewModel() {
+    ) : BaseViewModel() {
 
     private val _currentColor = MutableLiveResult<NamedColor>(LoadingResource())
     val currentColor: LiveResult<NamedColor> = _currentColor
 
-    private val colorListener: ColorListener = {
-        _currentColor.postValue(SuccessResource(it))
-    }
+
 
     // --- example of listening results via model layer
 
     init {
-        colorsRepository.addListener(colorListener)
+        viewModelScope.launch {
+            colorsRepository.listenCurrentColor().collectLatest {
+                _currentColor.postValue(SuccessResource(it))
+            }
+        }
+
         load()
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        colorsRepository.removeListener(colorListener)
-    }
 
     // --- example of listening results directly from the screen
 
@@ -101,12 +98,12 @@ class CurrentColorViewModel(
         }
     }
 
-     fun tryAgain() {
+    fun tryAgain() {
         load()
     }
 
     private fun load() = into(_currentColor) {
-     return@into  colorsRepository.getCurrentColor()
+        return@into colorsRepository.getCurrentColor()
     }
 
     private fun createPermissionAlreadyGrantedDialog() = DialogConfig(

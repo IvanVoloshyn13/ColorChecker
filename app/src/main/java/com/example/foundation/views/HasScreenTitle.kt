@@ -1,5 +1,7 @@
 package com.example.foundation.views
 
+import kotlinx.coroutines.flow.Flow
+
 
 /**
  * If your fragment wants to show custom screen title in the toolbar, implement this
@@ -10,5 +12,5 @@ package com.example.foundation.views
  */
 
 interface HasScreenTitle {
-    fun getScreenTitle():String?
+     fun getScreenTitle(): String?
 }
